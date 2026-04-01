@@ -1,0 +1,115 @@
+# 自定义技能
+
+这个目录用于存放自定义的技能，可以通过技能名称调用。
+
+## 如何创建技能
+
+1. 在此目录创建 `.md` 文件
+2. 文件名即为技能名（如 `deploy.md` → `deploy`）
+3. 文件开头必须包含 frontmatter（YAML 格式）
+4. **重要：添加 `user-invocable: true` 使技能可通过 `/skill-name` 调用**
+
+## 技能配置示例
+
+### deploy.md → 可通过 `/deploy` 调用
+
+```markdown
+---
+name: deploy
+description: 部署应用到生产环境
+user-invocable: true
+---
+
+# 部署技能
+
+## 用途
+自动化部署流程
+
+## 参数
+- environment: 部署环境 (staging/production)
+- version: 版本号
+
+## 执行步骤
+[部署流程...]
+```
+
+### Frontmatter 字段说明
+
+| 字段 | 必填 | 说明 |
+|------|------|------|
+| `name` | ✅ | 技能名称，必须与文件名一致 |
+| `description` | ✅ | 技能描述，显示在技能列表中 |
+| `user-invocable` | ⚠️ | **设置为 `true` 才能通过 `/skill-name` 调用** |
+| `parameters` | ❌ | 技能参数定义（可选） |
+
+## 最佳实践
+
+- ✅ 技能名称简洁明了
+- ✅ 描述准确具体
+- ✅ **必须包含 `user-invocable: true` 才能通过 `/skill-name` 调用**
+- ✅ 参数设计合理
+- ✅ 提示词可执行
+- ❌ 避免过于复杂的技能
+
+## ⚠️ 常见错误
+
+### 错误 1：缺少 user-invocable 字段
+```markdown
+---
+name: deploy
+description: 部署应用
+# ❌ 缺少 user-invocable
+---
+```
+**结果：** 无法通过 `/deploy` 调用，只能通过 Skill 工具自动触发
+
+### 正确写法
+```markdown
+---
+name: deploy
+description: 部署应用
+user-invocable: true  # ✅ 添加此字段
+---
+```
+
+## 技能类型
+
+### 开发技能
+- 代码生成
+- 重构
+- 测试
+- 文档生成
+
+### 部署技能
+- CI/CD 流程
+- 环境配置
+- 监控设置
+- 性能优化
+
+### 运维技能
+- 系统管理
+- 问题排查
+- 安全检查
+- 备份恢复
+
+## 使用方式
+
+### 方式 1：通过斜杠命令（推荐）
+**前提：技能 frontmatter 中必须包含 `user-invocable: true`**
+
+```
+/deploy
+```
+
+或带参数：
+```
+/deploy environment=production version=1.0.0
+```
+
+### 方式 2：通过 Skill 工具
+在对话中描述需求，Claude 会自动调用相应技能。
+
+### 方式 3：通过 JSON 格式
+```
+deploy: {environment: "production", version: "1.0.0"}
+```

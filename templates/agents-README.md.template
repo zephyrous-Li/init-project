@@ -1,0 +1,61 @@
+# 自定义代理
+
+这个目录用于存放自定义的代理，可以创建具有特定角色和能力的团队成员。
+
+## 如何创建代理
+
+1. 在此目录创建 JSON 文件
+2. 文件名即为代理名（如 `developer.json` → `developer`）
+3. 定义代理的配置、角色和能力
+
+## 代理配置示例
+
+### developer.json → `developer`
+```json
+{
+  "name": "developer",
+  "role": "全栈开发者",
+  "capabilities": {
+    "programming": ["JavaScript", "Python", "TypeScript"],
+    "frameworks": ["React", "Node.js", "Django"],
+    "databases": ["PostgreSQL", "MongoDB"],
+    "tools": ["Git", "Docker", "CI/CD"]
+  }
+}
+```
+
+## 最佳实践
+
+- ✅ 角色定义清晰
+- ✅ 能力范围合理
+- ✅ 配置结构规范
+- ✅ 命名简洁明了
+- ❌ 避免角色冲突
+- ❌ 避免能力重复
+
+## 代理类型
+
+### 开发角色
+- Frontend Developer: 前端开发
+- Backend Developer: 后端开发
+- Full Stack Developer: 全栈开发
+- Mobile Developer: 移动开发
+
+### 工程角色
+- DevOps Engineer: 运维开发
+- QA Engineer: 质量保证
+- Tech Lead: 技术领导
+- Architect: 架构师
+
+### 管理角色
+- Product Manager: 产品经理
+- Project Manager: 项目经理
+- Scrum Master: 敏捷教练
+- Data Analyst: 数据分析师
+
+## 使用方式
+
+在 Claude Code 中通过代理名称调用：
+```
+developer: help fix authentication bug
+```

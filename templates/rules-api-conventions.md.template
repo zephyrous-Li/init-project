@@ -1,0 +1,143 @@
+# API 设计规范
+
+## RESTful 设计原则
+
+### 资源命名
+- 使用名词而非动词
+- 使用复数形式
+- 使用 kebab-case
+- ✅ `/users`、`/user-orders`
+- ❌ `/getUsers`、`/user_orders`
+
+### URL 层级
+- 按资源层次组织
+- 不超过 3 层嵌套
+- ✅ `/users/123/orders/456`
+- ❌ `/users/123/orders/456/items/789/details`
+
+## HTTP 方法
+
+### 方法语义
+- **GET**：获取资源（幂等、安全）
+- **POST**：创建资源（非幂等）
+- **PUT**：完整更新资源（幂等）
+- **PATCH**：部分更新资源（幂等）
+- **DELETE**：删除资源（幂等）
+
+### 使用示例
+```
+GET    /users          # 获取用户列表
+GET    /users/123      # 获取特定用户
+POST   /users          # 创建用户
+PUT    /users/123      # 完整更新用户
+PATCH  /users/123      # 部分更新用户
+DELETE /users/123      # 删除用户
+```
+
+## 响应格式
+
+### 成功响应
+- **200 OK**：GET/PATCH 成功
+- **201 Created**：POST 创建成功
+- **204 No Content**：DELETE/PUT 成功，无返回内容
+
+### 错误响应
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Validation failed",
+    "details": [
+      {
+        "field": "email",
+        "message": "Invalid email format"
+      }
+    ]
+  }
+}
+```
+
+## 错误码
+
+### 常用错误码
+- **400 Bad Request**：请求参数错误
+- **401 Unauthorized**：未认证
+- **403 Forbidden**：无权限
+- **404 Not Found**：资源不存在
+- **409 Conflict**：资源冲突
+- **422 Unprocessable Entity**：验证失败
+- **500 Internal Server Error**：服务器错误
+
+## 版本控制
+
+### 版本策略
+- 使用 URL 版本：`/v1/users`
+- 主版本号表示破坏性变更
+- 向后兼容的变更不增加版本号
+
+### 版本弃用
+- 提前通知弃用
+- 在响应头添加弃用警告
+- 保持旧版本至少 6 个月
+
+## 文档要求
+
+### API 文档
+- 使用 OpenAPI/Swagger 规范
+- 包含所有端点和参数
+- 提供请求/响应示例
+- 说明认证方式
+
+### 文档更新
+- 代码变更同步更新文档
+- 在 PR 中审查文档变更
+- 定期审查文档准确性
+
+## 分页
+
+### 分页参数
+```
+GET /users?page=1&limit=20
+```
+
+### 分页响应
+```json
+{
+  "data": [...],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 100,
+    "totalPages": 5
+  }
+}
+```
+
+## 过滤和排序
+
+### 过滤
+```
+GET /users?status=active&role=admin
+```
+
+### 排序
+```
+GET /users?sort=createdAt:desc
+```
+
+## 安全考虑
+
+### 认证
+- 使用 JWT 或 OAuth 2.0
+- 敏感操作需要重新认证
+- 实现 token 刷新机制
+
+### 授权
+- 验证用户权限
+- 实现资源级权限控制
+- 记录授权失败
+
+### 速率限制
+- 实现 API 速率限制
+- 返回 429 Too Many Requests
+- 在响应头返回速率限制信息

@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allowedTools": [
+      "Read",
+      "Write",
+      "Edit",
+      "Bash",
+      "Glob",
+      "Grep",
+      "AskUserQuestion",
+      "WebSearch"
+    ],
+    "dangerouslyAllowAll": false
+  },
+  "hooks": {
+    "PreToolUse": [],
+    "PostToolUse": []
+  },
+  "environmentVariables": {
+    "NODE_ENV": "development"
+  },
+  "skills": {
+    "autoInvoke": true
+  }
+}

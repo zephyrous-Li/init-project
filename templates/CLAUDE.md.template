@@ -1,0 +1,133 @@
+# [项目名称] - Claude Code 配置
+
+## 项目概述
+
+<!-- 在这里描述项目的基本信息和目标 -->
+
+**项目类型**：[Web 应用 / CLI 工具 / 库 / 其他]
+
+**主要功能**：
+- [功能 1]
+- [功能 2]
+- [功能 3]
+
+## 技术栈
+
+<!-- 列出项目使用的主要技术和框架 -->
+
+### 前端
+- [ ] 框架：[React / Vue / Svelte / 其他]
+- [ ] 状态管理：[Redux / Zustand / 其他]
+- [ ] 样式：[Tailwind / CSS Modules / 其他]
+
+### 后端
+- [ ] 语言：[Node.js / Python / Go / 其他]
+- [ ] 框架：[Express / Django / 其他]
+- [ ] 数据库：[PostgreSQL / MongoDB / 其他]
+
+## 工作流程
+
+<!-- 描述团队的工作流程和约定 -->
+
+### 开发流程
+1. 创建功能分支：`git checkout -b feature/xxx`
+2. 开发并提交
+3. 推送并创建 PR
+4. 代码审查
+5. 合并到主分支
+
+### Commit 规范
+遵循约定式提交：
+- `feat:` 新功能
+- `fix:` 修复 bug
+- `docs:` 文档更新
+- `refactor:` 重构
+- `test:` 测试相关
+- `chore:` 构建/工具相关
+
+## 代码规范
+
+<!-- 引用 .claude/rules/ 中的规范文件 -->
+
+本项目遵循以下规范：
+- 代码风格：参见 `.claude/rules/code-style.md`
+- 测试规范：参见 `.claude/rules/testing.md`
+- API 约定：参见 `.claude/rules/api-conventions.md`
+
+## 项目结构
+
+<!-- 描述项目的目录结构和组织方式 -->
+
+```
+project-root/
+├── src/              # 源代码
+├── tests/            # 测试文件
+├── docs/             # 文档
+├── scripts/          # 脚本工具
+└── .claude/          # Claude Code 配置
+```
+
+## 开发环境
+
+### 前置要求
+- [ ] Node.js >= 18
+- [ ] Python >= 3.10
+- [ ] Docker
+
+### 安装步骤
+```bash
+# 克隆仓库
+git clone <repo-url>
+cd <project-name>
+
+# 安装依赖
+npm install  # 或 pip install, etc.
+
+# 配置环境变量
+cp .env.example .env
+
+# 初始化数据库
+npm run db:migrate
+```
+
+### 常用命令
+```bash
+# 开发
+npm run dev
+
+# 测试
+npm run test
+
+# 构建
+npm run build
+
+# 部署
+npm run deploy
+```
+
+## 注意事项
+
+<!-- 任何特殊的注意事项或约定 -->
+
+### 重要约定
+- [约定 1]
+- [约定 2]
+
+### 禁止事项
+- [ ] 不要在代码中硬编码密钥
+- [ ] 不要提交敏感信息
+- [ ] 不要忽略测试
+
+## 团队成员
+
+<!-- 项目团队成员和联系方式 -->
+
+- [@username] - 角色
+- [@username] - 角色
+
+## 相关资源
+
+- [项目文档](docs/)
+- [API 文档](docs/api.md)
+- [贡献指南](CONTRIBUTING.md)
+```

@@ -1,0 +1,31 @@
+# Claude Code local configurations
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Build artifacts
+dist/
+build/
+node_modules/
+
+# Plans directory (local work)
+Plans/

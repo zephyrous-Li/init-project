@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allowedTools": [
+      "Read",
+      "Write",
+      "Edit",
+      "Bash",
+      "Glob",
+      "Grep",
+      "AskUserQuestion"
+    ]
+  },
+  "environmentVariables": {
+    "EDITOR": "nvim",
+    "SHELL": "/bin/bash"
+  },
+  "personalPreferences": {
+    "indentStyle": "space",
+    "indentSize": 2,
+    "quoteStyle": "single"
+  }
+}
