@@ -1,6 +1,6 @@
 ---
 name: init-project
-description: Use when starting a new project or when adding Claude Code configuration structure to an existing project. Generates CLAUDE.md, .claude/ directory with commands/, rules/, skills/, and agents/ subdirectories with detailed templates and best practices.
+description: Use when starting a new project or when adding Claude Code configuration structure to an existing project. Generates CLAUDE.md, .claude/ directory with commands/, rules/, skills/, and agents/ subdirectories with detailed templates and best practices. Automatically detects and offers to install CodeGraph MCP service if missing, then initializes it.
 ---
 
 # 项目初始化增强工具
@@ -49,6 +49,7 @@ bash .claude/skills/init-project/generate.sh
 project-root/
 ├── CLAUDE.md                   # 团队指令文件（提交到 Git）
 ├── CLAUDE.local.md             # 个人覆盖配置（.gitignore）
+├── .codegraph/                 # CodeGraph MCP 索引（可选，.gitignore）
 └── .claude/
     ├── settings.json           # 权限与配置（提交到 Git）
     ├── settings.local.json     # 个人权限配置（.gitignore）
@@ -86,6 +87,15 @@ vim .claude/skills/init-project/templates/CLAUDE.md.template
 
 ## 文件说明
 
+### CodeGraph MCP 服务
+
+- **.codegraph/**: CodeGraph 索引目录（可选）
+  - 自动检测 `codegraph` 命令是否可用
+  - 如未安装，可询问是否通过 `npx @colbymchenry/codegraph` 自动安装
+  - 提供代码结构查询、符号搜索、调用图分析等功能
+  - 初始化命令：`codegraph init -i`
+  - 如不需要，可回答 `N` 跳过安装和初始化
+
 ### 核心配置文件
 
 - **CLAUDE.md**：团队指令文件，定义项目级别的配置和约定
@@ -117,6 +127,26 @@ vim .claude/skills/init-project/templates/CLAUDE.md.template
 
 选择 `y` 覆盖，`N` 或直接回车跳过。
 
+### CodeGraph 安装
+
+当未检测到 `codegraph` 命令时：
+
+```
+⚠️  未检测到 codegraph 命令
+是否安装 CodeGraph (npx @colbymchenry/codegraph)？[y/N]
+```
+
+- **安装方式**：通过 `npx @colbymchenry/codegraph` 安装（无需全局安装）
+- **选择 `y`**：自动安装并询问是否初始化
+- **选择 `N`**：跳过 CodeGraph 设置
+
+安装成功后会询问是否初始化：
+
+```
+ℹ️  检测到 CodeGraph MCP 服务
+是否初始化 CodeGraph？[y/N]
+```
+
 ### Git 集成
 
 脚本会自动更新 `.gitignore`，添加以下内容：
@@ -125,6 +155,9 @@ vim .claude/skills/init-project/templates/CLAUDE.md.template
 # Claude Code local configurations
 CLAUDE.local.md
 .claude/settings.local.json
+
+# CodeGraph MCP index
+.codegraph/
 ```
 
 ### 团队协作

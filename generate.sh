@@ -118,6 +118,72 @@ create_from_template() {
     return 0
 }
 
+# 初始化 CodeGraph
+init_codegraph() {
+    # 检查 .codegraph/ 目录是否已存在
+    if [[ -d "$PROJECT_ROOT/.codegraph" ]]; then
+        print_info "CodeGraph 已初始化，跳过"
+        return 0
+    fi
+
+    # 检查 codegraph 命令是否可用
+    if ! command -v codegraph &> /dev/null; then
+        print_warning "未检测到 codegraph 命令"
+
+        # 询问是否安装
+        if [ -t 0 ]; then
+            read -p "是否安装 CodeGraph (npx @colbymchenry/codegraph)？[y/N] " -n 1 -r
+            echo
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                print_skip "跳过 CodeGraph 安装"
+                return 0
+            fi
+        else
+            # 非交互模式：从标准输入读取
+            read -r REPLY
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                print_skip "跳过 CodeGraph 安装"
+                return 0
+            fi
+        fi
+
+        # 执行安装
+        print_info "正在安装 CodeGraph..."
+        if npx @colbymchenry/codegraph &> /dev/null; then
+            print_success "CodeGraph 安装成功"
+        else
+            print_warning "CodeGraph 安装失败，跳过初始化"
+            return 0
+        fi
+    fi
+
+    # 询问是否初始化
+    print_info "检测到 CodeGraph MCP 服务"
+    if [ -t 0 ]; then
+        read -p "是否初始化 CodeGraph？[y/N] " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            print_skip "跳过 CodeGraph 初始化"
+            return 0
+        fi
+    else
+        # 非交互模式：从标准输入读取
+        read -r REPLY
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            print_skip "跳过 CodeGraph 初始化"
+            return 0
+        fi
+    fi
+
+    # 执行初始化
+    print_info "正在初始化 CodeGraph..."
+    if cd "$PROJECT_ROOT" && codegraph init -i; then
+        print_success "CodeGraph 初始化成功"
+    else
+        print_warning "CodeGraph 初始化失败，继续..."
+    fi
+}
+
 # 更新 .gitignore
 update_gitignore() {
     local gitignore="$PROJECT_ROOT/.gitignore"
@@ -125,6 +191,8 @@ update_gitignore() {
         "# Claude Code local configurations"
         "CLAUDE.local.md"
         ".claude/settings.local.json"
+        "# CodeGraph MCP index"
+        ".codegraph/"
     )
 
     # 检查是否已存在
@@ -174,6 +242,9 @@ generate_all() {
     create_from_template "agents-README.md.template" "$PROJECT_ROOT/.claude/agents/README.md"
     create_from_template "agents-code-reviewer.md.template" "$PROJECT_ROOT/.claude/agents/code-reviewer.md"
     create_from_template "agents-security-auditor.md.template" "$PROJECT_ROOT/.claude/agents/security-auditor.md"
+
+    # 初始化 CodeGraph
+    init_codegraph
 
     # 更新 .gitignore
     update_gitignore

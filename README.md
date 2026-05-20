@@ -20,6 +20,7 @@
 - 🔧 **Interactive & Friendly** - Respects existing files, asks before overwriting
 - 📦 **Modular Structure** - Organized commands, rules, skills, and agents directories
 - 🎨 **Colored Output** - Clear, color-coded feedback for all operations
+- 🔍 **CodeGraph Integration** - Automatic detection and initialization of CodeGraph MCP service
 
 ## Installation
 
@@ -76,6 +77,7 @@ bash ~/.claude/skills/init-project/generate.sh
 project-root/
 ├── CLAUDE.md                   # Team-level instructions (commit to Git)
 ├── CLAUDE.local.md             # Personal overrides (gitignored)
+├── .codegraph/                 # CodeGraph MCP index (gitignored, optional)
 └── .claude/
     ├── settings.json           # Permissions and configuration (commit to Git)
     ├── settings.local.json     # Personal settings (gitignored)
@@ -117,6 +119,30 @@ For automation, pipe `yes` or use `y` inputs:
 yes | bash generate.sh    # Overwrite all existing files
 echo "y" | bash generate.sh  # Overwrite first file only
 ```
+
+### CodeGraph Integration
+
+The script automatically detects and offers to initialize [CodeGraph](https://github.com/colbymchenry/codegraph), an MCP service that provides code structure analysis:
+
+```bash
+$ bash generate.sh
+ℹ️  检测到 CodeGraph MCP 服务
+是否初始化 CodeGraph？[y/N] y
+ℹ️  正在初始化 CodeGraph...
+✅ CodeGraph 初始化成功
+```
+
+**Features:**
+- 🔍 Automatic detection of installed `codegraph` command
+- 📦 Offers to install via `npx @colbymchenry/codegraph` if missing
+- 🚀 Initializes with `codegraph init -i` when confirmed
+- ⚡ Skips if `.codegraph/` directory already exists
+- 🎯 Always asks before installing or initializing
+
+**Benefits:**
+- Code structure queries and symbol search
+- Call graph analysis and impact tracking
+- Enhanced code understanding for Claude Code
 
 ## Project Structure
 
@@ -206,6 +232,9 @@ The script automatically updates `.gitignore` to exclude personal configurations
 # Claude Code local configurations
 CLAUDE.local.md
 .claude/settings.local.json
+
+# CodeGraph MCP index
+.codegraph/
 ```
 
 **Commit to Git:**
