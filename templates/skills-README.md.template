@@ -1,115 +1,122 @@
 # 自定义技能
 
-这个目录用于存放自定义的技能，可以通过技能名称调用。
+此目录存放项目专用的简单技能。
 
-## 如何创建技能
+## 目录结构
 
-1. 在此目录创建 `.md` 文件
-2. 文件名即为技能名（如 `deploy.md` → `deploy`）
-3. 文件开头必须包含 frontmatter（YAML 格式）
-4. **重要：添加 `user-invocable: true` 使技能可通过 `/skill-name` 调用**
+每个技能一个独立目录：
 
-## 技能配置示例
+```
+skills/
+├── deploy/
+│   ├── SKILL.md      # 技能执行文件（简洁）
+│   └── README.md     # 技能说明文档（详实）
+├── test/
+│   ├── SKILL.md
+│   └── README.md
+└── README.md         # 本文件
+```
 
-### deploy.md → 可通过 `/deploy` 调用
+## 文件职责
 
+### SKILL.md - 技能执行文件
+
+**简洁、可执行**，供 AI 直接执行。
+
+**必需内容**:
+- Frontmatter（name、description）
+- 执行步骤（清晰、可操作）
+
+**示例**:
 ```markdown
 ---
 name: deploy
 description: 部署应用到生产环境
-user-invocable: true
 ---
 
-# 部署技能
+# 部署执行
 
-## 用途
-自动化部署流程
-
-## 参数
-- environment: 部署环境 (staging/production)
-- version: 版本号
-
-## 执行步骤
-[部署流程...]
+1. 运行测试：`npm test`
+2. 构建镜像：`docker build -t app:latest .`
+3. 推送镜像：`docker push app:latest`
+4. 更新部署：`kubectl apply -f deployment.yaml`
+5. 验证健康：`kubectl get pods`
 ```
 
-### Frontmatter 字段说明
+### README.md - 技能说明文档
 
-| 字段 | 必填 | 说明 |
-|------|------|------|
-| `name` | ✅ | 技能名称，必须与文件名一致 |
-| `description` | ✅ | 技能描述，显示在技能列表中 |
-| `user-invocable` | ⚠️ | **设置为 `true` 才能通过 `/skill-name` 调用** |
-| `parameters` | ❌ | 技能参数定义（可选） |
+**详实、全面**，供人类开发者参考。
+
+**应包含**:
+- 技能用途
+- 使用场景
+- 参数说明
+- 前置条件
+- 注意事项
+- 示例用法
+
+**示例**:
+```markdown
+# Deploy 技能
+
+## 用途
+自动化部署应用到生产环境。
+
+## 使用场景
+- 代码合并到 main 分支后
+- 发布新版本时
+- 紧急热修复时
+
+## 参数
+| 参数 | 说明 | 默认值 |
+|------|------|--------|
+| environment | 部署环境 | production |
+| version | 版本号 | latest |
+
+## 前置条件
+- 已配置 kubectl 访问权限
+- Docker 镜像仓库访问凭证
+- 通过所有测试
+
+## 注意事项
+- 部署前必须通过所有测试
+- 生产环境部署需要团队审批
+- 部署后验证服务健康状态
+
+## 示例
+```
+/deploy environment=production version=1.2.0
+```
+```
+
+## 创建新技能步骤
+
+1. 创建技能目录：`mkdir skills/my-skill`
+2. 创建 `SKILL.md`（简洁的执行步骤）
+3. 创建 `README.md`（详实的说明文档）
+4. 重启 Claude Code 会话
+
+## 技能调用
+
+```
+/技能名
+```
+
+带参数：
+```
+/技能名 参数1=值1 参数2=值2
+```
 
 ## 最佳实践
 
-- ✅ 技能名称简洁明了
-- ✅ 描述准确具体
-- ✅ **必须包含 `user-invocable: true` 才能通过 `/skill-name` 调用**
-- ✅ 参数设计合理
-- ✅ 提示词可执行
-- ❌ 避免过于复杂的技能
+- ✅ SKILL.md 简洁，只写执行步骤
+- ✅ README.md 详实，覆盖所有细节
+- ✅ 技能目录名与 frontmatter name 一致
+- ❌ 不要在 SKILL.md 中堆砌说明文档
+- ❌ 不要在 README.md 中重复执行步骤
 
-## ⚠️ 常见错误
+## 示例技能
 
-### 错误 1：缺少 user-invocable 字段
-```markdown
----
-name: deploy
-description: 部署应用
-# ❌ 缺少 user-invocable
----
-```
-**结果：** 无法通过 `/deploy` 调用，只能通过 Skill 工具自动触发
-
-### 正确写法
-```markdown
----
-name: deploy
-description: 部署应用
-user-invocable: true  # ✅ 添加此字段
----
-```
-
-## 技能类型
-
-### 开发技能
-- 代码生成
-- 重构
-- 测试
-- 文档生成
-
-### 部署技能
-- CI/CD 流程
-- 环境配置
-- 监控设置
-- 性能优化
-
-### 运维技能
-- 系统管理
-- 问题排查
-- 安全检查
-- 备份恢复
-
-## 使用方式
-
-### 方式 1：通过斜杠命令（推荐）
-**前提：技能 frontmatter 中必须包含 `user-invocable: true`**
-
-```
-/deploy
-```
-
-或带参数：
-```
-/deploy environment=production version=1.0.0
-```
-
-### 方式 2：通过 Skill 工具
-在对话中描述需求，Claude 会自动调用相应技能。
-
-### 方式 3：通过 JSON 格式
-```
-deploy: {environment: "production", version: "1.0.0"}
-```
+参考现有技能目录结构：
+- `skills/deploy/SKILL.md` + `README.md`
+- `skills/test/SKILL.md` + `README.md`
